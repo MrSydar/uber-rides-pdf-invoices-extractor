@@ -1,12 +1,8 @@
+from src.gui import *
+from tabula import read_pdf
+import pandas as pd
 import os
 import re
-
-import pandas as pd
-from tabula import read_pdf
-
-pd.options.display.max_columns = None
-pd.options.display.max_rows = None
-pdf_dir = "C:/Users/Den/Desktop/pdf_to_process"
 
 class String:
     def __init__(self, my_string):
@@ -153,7 +149,11 @@ def process_invoice(pdf_path):
 
     return df
 
-def main():
+def extract(pdf_dir):
+    if pdf_dir == "":
+        print("Working directory is not selected")
+        return
+
     counter = 1
     invoices = []
     for filename in os.listdir(pdf_dir):
@@ -187,6 +187,15 @@ def main():
     ]
 
     invoices.to_csv(pdf_dir + "/" + 'invoices.csv', index=False)
+
+def main():
+    app = Application(tk.Tk())
+    app.wire_extract_function(lambda: extract(app.working_directory))
+    app.mainloop()
+
+    # pdf_dir = "C:/Users/Den/Desktop/pdf_to_process"
+    # invoices = extract(pdf_dir)
+    # invoices.to_csv(pdf_dir + "/" + 'invoices.csv', index=False)
 
 if __name__ == "__main__":
     main()
